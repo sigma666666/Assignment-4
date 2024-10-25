@@ -20,7 +20,7 @@ sudo apt install -y openjdk-8-jdk
 ```
 
 ## Part 1: Software deployment
-![HDFS and Spark cluster](./ass4/hdfs_spark.png)
+![HDFS and Spark cluster](./hdfs_spark.png)
 
 
 ### Hadoop Distributed File System (HDFS)
