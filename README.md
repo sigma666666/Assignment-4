@@ -19,6 +19,21 @@ sudo apt update
 sudo apt install -y openjdk-8-jdk
 ```
 
+Then, you should enable password-free SSH service between the two EC2 instances. To do so, you need to generate a private/public key pair using:
+```bash
+ssh-keygen -t rsa
+```
+on the leader EC2 instance node (which we call `vm1`). The other EC2 instance will be assigned as follower. Then, manually copy the public key of `vm1` to the `authorized_key` file in both of the two instances (`vm1` **and** `vm2`) under `~/.ssh/`. To get the content of the public key saved in `id_rsa.pub`, do:
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+Then copy the entire output of the above command to `authorized_key`. Make sure you do not append any newlines. Otherwise it will not work. **Also note that you should NOT overwrite the existing line in `authorized_key` file. Otherwise you will no longer be able to login to your VM**.
+
+Once you are done with `vm1`, you should copy the content of `id_rsa.pub` in `vm1` over to `~/.ssh/authorized_key` in `vm2`. This way, the leader node `vm1` will have password-free SSH access to both itself and its follower node `vm2`.
+
+> **IMPORTANT:** This is a critical step: if you do not complete this step, the startup script will not be able to remote start the HDFS/Spark daemon process on `vm2` (you will get permission denied error).
+
 ## Part 1: Software deployment
 ![HDFS and Spark cluster](./hdfs_spark.png)
 
