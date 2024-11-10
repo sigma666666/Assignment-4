@@ -257,23 +257,26 @@ In this assignment, you are required to complete the following:
 
     |**Word**|for|called|to|the|
     |:--:|:--:|:--:|:--:|:--:|
-    |**Occurence**|||||
+    |**Occurence**|7|4|29|46|
 
 - Upload the code and execution log in Part 2. (1 point)
 - For Part 3, please fill the table below based on the execution results of your PageRank program. Note that the Rank should retains 2 digits after the decimal point. (2 points)
 
     |**Node**|448126|49717|375375|63087|
     |:--:|:--:|:--:|:--:|:--:|
-    |**Rank**|||||
+    |**Rank**|13.34|4.4|54.09|0.65|
 
 - For Part 3, Task 2, explain the custom RDD partitioning you implemented and the changes it brings. (1 point)
 
     > (Your answer goes here)
+    > For Part 3, Task 2, I implemented a custom RDD partitioning strategy to enhance the PageRank algorithm's performance by distributing data more effectively across nodes. The custom partitioner ensures that pages with high interconnectivity (many incoming and outgoing links) are grouped together in the same partition. This approach reduces data shuffling during iterations, as computations for linked pages happen locally within partitions, minimizing the need to transfer data between nodes. Consequently, the algorithm experiences reduced network communication overhead and improved computational speed.
+Additionally, by grouping frequently referenced nodes together, the partitioning helps achieve better load balancing across nodes, avoiding bottlenecks that might arise from uneven data distribution. The change results in faster convergence of the PageRank scores, leading to more efficient execution and better utilization of cluster resources during iterative processing.
 
 - For Part 3 Task 3, explain the changes after the Worker process is killed. (1 point)
 
     > (Your answer goes here)
-
+	When a Worker process is killed during the execution of the PageRank algorithm, several changes occur in the distributed Spark cluster. First, any tasks assigned to the failed Worker are immediately reassigned to other available Workers by the Spark driver, ensuring that the computation continues without manual intervention. This fault-tolerant behavior leverages Spark's built-in resilience to maintain progress despite node failures.
+The reassignment may introduce some delays due to data reloading from HDFS and recalculating intermediate results. As tasks are redistributed, network traffic might increase because data and states previously held by the failed Worker must be transferred to new nodes. This can momentarily reduce overall system performance. However, the cluster typically stabilizes quickly, resuming computations at near-normal speed once task reallocation completes. This behavior demonstrates Spark’s capability to maintain reliable distributed processing even in adverse conditions, ensuring system robustness and continuity of complex operations like PageRank.
 - Upload the program and the corresponding execution logs for Task 1 and 2 in Part 3. (2 points)
 
 
